@@ -3,6 +3,8 @@ import sys
 import pygame
 import numpy as np
 
+# Changement
+
 pygame.init()
 screen = pygame.display.set_mode([1000, 1000])
 clock = pygame.time.Clock()
