@@ -1,7 +1,3 @@
-
-#
-#
-#
 #Setup
 import random
 import sys
@@ -38,20 +34,21 @@ DOWN = [0, 1]
 LEFT = [-1, 0]
 RIGHT = [1, 0]
 
-pygame.init()
-screen = pygame.display.set_mode([CELL_SIZE*WIDTH, CELL_SIZE*HEIGHT])
-clock = pygame.time.Clock()
 
-
-
-#Main Loop
-while True:
+def setup():
     
-    #Event Management
+    pygame.init() 
+    
+    return pygame.display.set_mode([CELL_SIZE*WIDTH, CELL_SIZE*HEIGHT]), pygame.time.Clock()
+
+
+
+def handle_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
         elif event.type == pygame.KEYDOWN:
+            global direction
             if event.key == pygame.K_q:
                 exit()
             if event.key == pygame.K_UP:
@@ -63,7 +60,10 @@ while True:
             elif event.key == pygame.K_RIGHT:
                 direction = RIGHT
     
-    #Game Logic
+
+def move_snake():
+    global snake
+    global fruit, score
     head = snake[-1]
     new_head = [
       head[0] + direction[0],
@@ -86,7 +86,9 @@ while True:
         ]
     else:
         snake = snake[1:] + [new_head]
-    
+
+
+def draw_frame(screen):
     #Frame Update
     screen.fill(COLORS["background"])
     for x, y in snake:
@@ -98,14 +100,15 @@ while True:
     
     #Game State
     pygame.display.set_caption(f"🐍 Score: {score}")
+
+def wait_for_next_frame(clock):
+    clock.tick(FPS)
+
     
-    #Wait for next frame
-    clock.tick(FPS) ######
 
-
-
-
-
-
-
-
+screen, clock = setup()
+while True:
+    handle_events()
+    move_snake()
+    draw_frame(screen)
+    wait_for_next_frame(clock)
